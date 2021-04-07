@@ -90,30 +90,30 @@ foreach ($courses as $course) : ?>
 				<b>Weekday:</b><br />
 				<span  class="gs-ticket">Round Ticket:</span>
 <?php if($course->wkday_rnd != 0) : ?>
-				<b class="gs-green">&pound;<?php echo $course->wkday_rnd; ?></b><br />
+				<b class="gs-colour">&pound;<?php echo $course->wkday_rnd; ?></b><br />
 <?php else : ?>
-				<b class="gs-green">n/a</b><br />
+				<b class="gs-colour">n/a</b><br />
 <?php endif; ?>
 				<span  class="gs-ticket">Day Ticket:</span>
 <?php if($course->wkday_day != 0) : ?>
-				<b class="gs-green">&pound;<?php echo $course->wkday_day; ?></b>
+				<b class="gs-colour">&pound;<?php echo $course->wkday_day; ?></b>
 <?php else : ?>
-				<b class="gs-green">n/a</b>
+				<b class="gs-colour">n/a</b>
 <?php endif; ?>
 </div><!-- end #gs-weekday -->
 			<div id="gs-weekend">
 				<b>Weekend:</b><br />
 				<span  class="gs-ticket">Round Ticket:</span>
 <?php if($course->wkend_rnd != 0) : ?>
-				<b class="gs-green">&pound;<?php echo $course->wkend_rnd; ?></b><br />
+				<b class="gs-colour">&pound;<?php echo $course->wkend_rnd; ?></b><br />
 <?php else : ?>
-				<b class="gs-green">n/a</b><br />
+				<b class="gs-colour">n/a</b><br />
 <?php endif; ?>
 				<span  class="gs-ticket">Day Ticket:</span>
 <?php if($course->wkend_day != 0) : ?>
-				<b class="gs-green">&pound;<?php echo $course->wkend_day; ?></b>
+				<b class="gs-colour">&pound;<?php echo $course->wkend_day; ?></b>
 <?php else : ?>
-				<b class="gs-green">n/a</b>
+				<b class="gs-colour">n/a</b>
 <?php endif; ?>
 			</div><!-- end #gs-weekend -->
 <?php
