@@ -129,7 +129,11 @@ if ( $myhome_top ) :
 			<?php if ( is_singular( 'post' ) ) : ?>
 				<div class="mh-top-title__heading"><?php echo esc_html( $myhome_top_title_title ); ?></div>
 			<?php else : ?>
+<<<<<<< HEAD
 				<h1 class="mh-top-title__heading"><?php echo $myhome_top_title_title; ?></h1>
+=======
+				<h1 class="mh-top-title__heading"><?php $myhome_top_title_title; ?></h1>
+>>>>>>> 8a79191a8224cdf3ccff9089107105eb4bbf727e
 			<?php endif; ?>
 		<?php endif; ?>
 
