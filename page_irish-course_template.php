@@ -13,7 +13,7 @@ endif;
 global $wpdb;
 
 // data queries gi_courses table - course details
-$courses = $wpdb->get_results("SELECT c.id, c.name, c.address, c.telephone, c.website, c.email, c.facebook, c.twitter, c.instagram, c.youtube, c.length, c.par, c.description, c.wkday_rnd, c.wkday_day, c.wkend_rnd, c.wkend_day, c.greenfee_note1, c.directions, c.course_lat, c.course_lng, c.special_offers, c.feature_switch, c.top_course, c.featured_course, c.img_logo, c.img_hdr, c.img_ftr, c.img_ad1, c.video1, cr.region, ct.type FROM gi_courses AS c INNER JOIN gi_course_regions AS cr ON c.region = cr.id INNER JOIN gi_course_types AS ct ON c.type = ct.id WHERE c.id = ".$golfCourseID."");
+$courses = $wpdb->get_results("SELECT c.id, c.name, c.address, c.telephone, c.website, c.email, c.facebook, c.twitter, c.instagram, c.youtube, c.length, c.par, c.description, c.currency, c.wkday_rnd, c.wkday_day, c.wkend_rnd, c.wkend_day, c.greenfee_note1, c.directions, c.course_lat, c.course_lng, c.special_offers, c.feature_switch, c.top_course, c.featured_course, c.img_logo, c.img_hdr, c.img_ftr, c.img_ad1, c.video1, cr.region, ct.type FROM gi_courses AS c INNER JOIN gi_course_regions AS cr ON c.region = cr.id INNER JOIN gi_course_types AS ct ON c.type = ct.id WHERE c.id = ".$golfCourseID."");
 
 // data queries gi_courses table - feature and facilities
 $features = $wpdb->get_results("SELECT id, trolly_hire, catering, club_hire, clubhouse, showers, changing_rooms, driving_range, proshop, putting_area, buggy_hire, tuition, conference_facilities, function_room, corporate_golf, society_golf, feature_note FROM gi_courses WHERE id = ".$golfCourseID."");
@@ -23,7 +23,7 @@ $videos = $wpdb->get_results("SELECT id, video1, video2, video3 FROM gi_courses 
 
 // set variables
 // if course logo not available use golf england icon
-$ge_icon = '2021/03/gi-icon_white.png';
+$gi_icon = '2021/03/gi-icon_white.png';
 
 get_header();
 
@@ -50,6 +50,45 @@ foreach ($courses as $course) : ?>
 <?php endif; ?>
 }
 
+#book-now-button {
+  width: 50%;
+  margin: auto;
+}
+#book-now {
+  background-color: lightblue;
+  border: 7px lightgrey;
+  border-style: ridge;
+  border-radius: 20px;
+  width: 100%;
+  padding: 10px 0px;
+  font-size: 48px;
+  font-weight: bolder;
+  color: white;
+  cursor: pointer;
+}
+#book-now:hover {
+  background-color: white;
+  color: lightblue;
+}
+.blink {
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 2s steps(5, start) infinite;
+}
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@media only screen and (max-width: 480px) {
+	#book-now-button {
+		width: 100%;
+	}
+}
 #gs-footer {
 <?php if($course->img_ftr != null) : ?>
 	background-image: url('<?php echo $img_uri.$course->img_ftr; ?>');
@@ -63,7 +102,7 @@ foreach ($courses as $course) : ?>
 <?php if($course->img_logo != null) : ?>
 <img id="gs-logo" src="<?php echo $img_uri.$course->img_logo; ?>" alt="club logo" />
 <?php else : ?>
-<img id="gs-logo" src="<?php echo $img_uri.$ge_icon; ?>" alt="gs logo" />
+<img id="gs-logo" src="<?php echo $img_uri.$gi_icon; ?>" alt="gi logo" />
 <?php endif; ?>
 <h1><?php echo $course->name; ?></h1>
 </section><!-- end #gs-header -->
@@ -85,18 +124,25 @@ foreach ($courses as $course) : ?>
 
 		<h3>Green Fees:</h3>
 		<div id="gs-greenFees">
-<?php if(($course->wkday_rnd != null) && ($course->wkday_day != null) && ($course->wkend_rnd != null) && ($course->wkend_day != null)) : ?>
+<?php
+// data queries gi_currencies table - currency symbol
+$currencies = $wpdb->get_results("SELECT id, currency, symbol FROM gi_currencies WHERE id = ".$course->currency."");
+foreach($currencies as $currency) {
+}
+if(($course->wkday_rnd != null) && ($course->wkday_day != null) && ($course->wkend_rnd != null) && ($course->wkend_day != null)) :
+
+?>
 			<div id="gs-weekday">
 				<b>Weekday:</b><br />
 				<span  class="gs-ticket">Round Ticket:</span>
 <?php if($course->wkday_rnd != 0) : ?>
-				<b class="gs-colour">&pound;<?php echo $course->wkday_rnd; ?></b><br />
+				<b class="gs-colour"><?php echo $currency->symbol.$course->wkday_rnd; ?></b><br />
 <?php else : ?>
 				<b class="gs-colour">n/a</b><br />
 <?php endif; ?>
 				<span  class="gs-ticket">Day Ticket:</span>
 <?php if($course->wkday_day != 0) : ?>
-				<b class="gs-colour">&pound;<?php echo $course->wkday_day; ?></b>
+				<b class="gs-colour"><?php echo $currency->symbol.$course->wkday_day; ?></b>
 <?php else : ?>
 				<b class="gs-colour">n/a</b>
 <?php endif; ?>
@@ -105,13 +151,13 @@ foreach ($courses as $course) : ?>
 				<b>Weekend:</b><br />
 				<span  class="gs-ticket">Round Ticket:</span>
 <?php if($course->wkend_rnd != 0) : ?>
-				<b class="gs-colour">&pound;<?php echo $course->wkend_rnd; ?></b><br />
+				<b class="gs-colour"><?php echo $currency->symbol.$course->wkend_rnd; ?></b><br />
 <?php else : ?>
 				<b class="gs-colour">n/a</b><br />
 <?php endif; ?>
 				<span  class="gs-ticket">Day Ticket:</span>
 <?php if($course->wkend_day != 0) : ?>
-				<b class="gs-colour">&pound;<?php echo $course->wkend_day; ?></b>
+				<b class="gs-colour"><?php echo $currency->symbol.$course->wkend_day; ?></b>
 <?php else : ?>
 				<b class="gs-colour">n/a</b>
 <?php endif; ?>
@@ -170,12 +216,12 @@ foreach ($courses as $course) : ?>
 
 				// golf scotland icon
 				// get icon image
-				var ge_icon = '<?php echo $img_uri.'2021/03/gi-icon40.png'; ?>';
+				var gi_icon = '<?php echo $img_uri.'2021/03/gi-icon40.png'; ?>';
 				// set icon
-				var golfscot = {icon: ge_icon};
+				var golfscot = {icon: gi_icon};
 
 				// The marker, positioned at this course
-				var marker = new google.maps.Marker({position: this_course, icon: ge_icon, map: map});
+				var marker = new google.maps.Marker({position: this_course, icon: gi_icon, map: map});
 				marker.addListener('click', function() { infowindow.open(map, marker);});
 			}
 		</script>
@@ -209,7 +255,16 @@ if($course->special_offers != null) : ?>
 		</div><!-- end #gs-specialOffers-->
 <?php
 endif;
+?>
 
+		<!-- insert book now button -->
+		<div id="book-now-button">
+			<a href="<?php echo $course->website; ?>">
+				<img src="<?php echo $img_uri; ?>/2021/07/booknow.gif" alt="book now graphic" />
+			</a>
+		</div><!-- end book-now-button -->
+
+<?php
 	if($course->feature_switch == 1) :
 		foreach ($features as $feature) : ?>
 		<h3>Golf Course Features and Facilities:</h3>
@@ -263,25 +318,25 @@ endif;
 		endforeach;
 	endif;
 
-	if ($courses->video1 != null) :
+if ($course->video1 != null) :
 ?>
-		<h2>Gallery:</h2>
+		<h3>Gallery:</h3>
 		<div id="gs-gallery">
 			<div id="gs-video">
 <?php
-		foreach ($videos as $video) :
-			for ($x=1; $x <= 3; $x++) :
-				$video = 'video'.$x;
-				// set video image width and height
-				$v_width = 425;
-				$v_height = 239;
-				if($video->$video != null) :
+	foreach ($videos as $video) :
+		for ($x=1; $x <= 3; $x++) :
+			$vid = 'video'.$x;
+			// set video image width and height
+			$v_width = 425;
+			$v_height = 239;
+			if($video->$vid != null) :
 ?>
-				<iframe class="gs-vid" width="<?php echo $v_width; ?>" height="<?php echo $v_height; ?>" src="<?php echo $video_uri.$video->$video; ?>" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				<iframe class="gs-vid" width="<?php echo $v_width; ?>" height="<?php echo $v_height; ?>" src="<?php echo $video_uri.$video->$vid; ?>" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <?php
-				endif;
-			endfor;
-		endforeach;
+			endif;
+		endfor;
+	endforeach;
 ?>
 			</div><!-- end #gs-video -->
 		</div><!-- end #gs-gallery -->
