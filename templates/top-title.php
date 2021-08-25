@@ -124,16 +124,15 @@ if ( $myhome_top ) :
 				data-parent-fit="cover"
 			<?php endif; ?>
 		<?php endif; ?>
-	>
+		>
+		
 		<?php if ( ! empty( $myhome_top_title_title ) ) : ?>
 			<?php if ( is_singular( 'post' ) ) : ?>
 				<div class="mh-top-title__heading"><?php echo esc_html( $myhome_top_title_title ); ?></div>
-			<?php else : ?>
-<<<<<<< HEAD
+			<?php elseif (preg_match('/:\s/', $myhome_top_title_title)) : ?>
 				<h1 class="mh-top-title__heading"><?php echo $myhome_top_title_title; ?></h1>
-=======
-				<h1 class="mh-top-title__heading"><?php $myhome_top_title_title; ?></h1>
->>>>>>> 8a79191a8224cdf3ccff9089107105eb4bbf727e
+			<?php else : ?>
+				<h1 class="mh-top-title__heading"><?php echo esc_html( $myhome_top_title_title ); ?></h1>
 			<?php endif; ?>
 		<?php endif; ?>
 
